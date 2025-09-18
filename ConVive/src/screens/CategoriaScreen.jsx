@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import { Items } from "../data/items"; // seu mock de itens por categoria
+import { Items } from "../data/items";
 
 export default function CategoriaScreen({ route }) {
   const { categoria } = route.params; // categoria enviada do HomeScreen
