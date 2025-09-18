@@ -4,8 +4,10 @@ export const Items = {
     { id: "2", title: "Piquenique Comunitário"},
   ],
   Espaços: [
-    { id: "1", title: "Praça Central" },
-    { id: "2", title: "Quadra Poliesportiva" },
+    { id: "1", title: "Praça Central (Catedral São José)" },
+    { id: "2", title: "Complexo Esportivo Roberto Brzezinski" },
+    { id: "3", title: "Ginásio De Esportes Vila Urupês" },
+    { id: "4", title: "Parque do Lago" },
   ],
   Atividades: [
     { id: "1", title: "Aula de Dança" },
