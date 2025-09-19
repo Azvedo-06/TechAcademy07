@@ -18,7 +18,7 @@ export function AppNavigation() {
         <Stack.Screen
           name="Categoria"
           component={CategoriaScreen}
-          options={({ route }) => ({title: route.params.categoria.toUpperCase()})}
+          options={({ route }) => ({title: route.params.categoria.name.toUpperCase()})}
         />
       </Stack.Navigator>
     </NavigationContainer>
