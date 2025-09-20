@@ -1,12 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {Text, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function Card({ item }) {
+export default function Card({ item, onPress }) {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card } onPress={onPress}>
       <Text style={styles.cardText}>{item.title}</Text>
       {item.data ? <Text style={styles.cardDesc}>{item.data}</Text> : null}
-    </View>
+      {item.description ? <Text style={styles.cardDesc}>{item.description}</Text> : null}
+    </TouchableOpacity>
   );
 }
 

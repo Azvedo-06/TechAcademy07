@@ -32,6 +32,7 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    padding: 50,
     flex: 1,
     justifyContent: "center", 
     alignItems: "center", 
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
     padding: 30,
     borderRadius: 10,
     marginVertical: 20,
+    margin: 10,
     alignItems: "center",
   },
   buttonText: {

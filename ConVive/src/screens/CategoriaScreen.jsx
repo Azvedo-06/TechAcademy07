@@ -2,14 +2,25 @@ import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet,
 RefreshControl} from "react-native";
 import Card from "../components/Card";
+import ModalCard from "../components/Modal";
 
 export default function CategoriaScreen({ route }) {
   const { categoria } = route.params; // categoria enviada do HomeScreen
   const dados = categoria.items || []; // pega os itens do mock
 
+  // estados para o modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
   // estado para os itens exibidos
   const [items, setItems] = useState(dados);
   const [loading, setLoading] = useState(false);
+
+  // estados para o modal
+  const handleItemPress = (item) => {
+  setSelectedItem(item); 
+  setModalVisible(true);
+  }
 
   // função de refresh
   const reload = () => {
@@ -25,9 +36,9 @@ export default function CategoriaScreen({ route }) {
       <Text style={styles.title}>{categoria.name}</Text>
 
       <FlatList
-        data={items}
+        data={dados}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <Card item={item} />}
+        renderItem={({ item }) => <Card item={item} onPress={() => handleItemPress(item)} />}
         ListEmptyComponent={
           <View style={{ alignItems: "center", padding: 24 }}>
             <Text>Nenhum produto cadastrado.</Text>
@@ -37,6 +48,11 @@ export default function CategoriaScreen({ route }) {
           <RefreshControl refreshing={loading} onRefresh={reload} />
         }
         contentContainerStyle={items.length === 0 ? styles.listEmpty : styles.list}
+      />
+      <ModalCard 
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        selectedItem={selectedItem}
       />
     </View>
   );
