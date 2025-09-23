@@ -37,7 +37,7 @@ export default function ModalCard({
                   />
                 ) : null}
                 <Text style={styles.modalTitle}>{selectedItem.title}</Text>
-                {selectedItem.data ? <Text>{selectedItem.data}</Text> : null}
+                {selectedItem.descriptionModal ? <Text style={styles.modalDescription}>{selectedItem.descriptionModal}</Text> : null}
               </>
             )}
             <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -67,12 +67,16 @@ const styles = StyleSheet.create({
   modalImage: {
     width: "100%",
     height: 200,
-    resizeMode: "cover",
+    resizeMode: "stretch",
     marginBottom: 10,
   },
   modalTitle: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  modalDescription: {
+    fontSize: 14,
+    color: "#333",
   },
 });

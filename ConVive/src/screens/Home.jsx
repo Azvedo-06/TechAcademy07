@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  Image,
 } from "react-native";
 import { Mock } from "../data/Mock";
 
@@ -19,11 +20,11 @@ export default function HomeScreen({ navigation }) {
           <TouchableOpacity
             style={styles.button}
             onPress={() =>
-              navigation.navigate("Categoria", { categoria: item }) 
+              navigation.navigate("Categoria", { categoria: item })
             }
           >
             <Text style={styles.buttonText}>{item.name}</Text>
-          </TouchableOpacity> 
+          </TouchableOpacity>
         )}
       />
     </View>
@@ -34,8 +35,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 50,
     flex: 1,
-    justifyContent: "center", 
-    alignItems: "center", 
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#fff",
   },
   title: {
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#66bb6ab6",
+    backgroundColor: "#f0f0f0",
     padding: 30,
     borderRadius: 10,
     marginVertical: 20,

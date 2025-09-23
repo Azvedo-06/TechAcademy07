@@ -13,7 +13,7 @@ export function AppNavigation() {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: "ConVive" }}
+          options={{ title: "ConVive (Campo Mourão)" }}
         />
         <Stack.Screen
           name="Categoria"
