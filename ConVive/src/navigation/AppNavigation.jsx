@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import ParticipeScreen from "../screens/ParticipeScreen"
 import HomeScreen from "../screens/Home";
 import CategoriaScreen from "../screens/CategoriaScreen";
 
@@ -19,6 +20,10 @@ export function AppNavigation() {
           name="Categoria"
           component={CategoriaScreen}
           options={({ route }) => ({title: route.params.categoria.name.toUpperCase()})}
+        />
+        <Stack.Screen
+          name="Participe"
+          component={ParticipeScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

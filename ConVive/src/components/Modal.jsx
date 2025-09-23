@@ -8,12 +8,16 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+
 
 export default function ModalCard({
   modalVisible,
   setModalVisible,
   selectedItem,
 }) {
+  const navigation = useNavigation();
   return (
     <Modal
       visible={modalVisible}
@@ -43,6 +47,16 @@ export default function ModalCard({
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={{ color: "blue", marginTop: 20 }}>Fechar</Text>
             </TouchableOpacity>
+            <TouchableOpacity 
+          onPress={() => {
+            // Aqui você ajusta a rota real depois
+            navigation.navigate("Participe");
+            setModalVisible(false);
+          }} 
+          style={{ marginTop: 15 }}
+        >
+          <Text style={{ color: "green", fontWeight: "bold" }}>Participe</Text>
+        </TouchableOpacity>
           </ScrollView>
         </View>
       </View>
