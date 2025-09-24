@@ -1,12 +1,34 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState} from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 
 export default function QuadroParticipacao() {
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [cpf, setCpf] = useState("");
   const navigation = useNavigation();
+
+  
+  const handleParticipar = () => {
+    if (!nome || !telefone || !cpf) {
+      Alert.alert("Atenção", "Preencha todos os campos para participar!");
+      return;
+    }
+
+    Alert.alert("Pronto!", "Participação confirmada!", [
+      {
+        text: "OK",
+        onPress: () => navigation.navigate("Home"),
+      },
+    ]);
+  };
 
   return (
     <View style={styles.card}>
@@ -35,15 +57,9 @@ export default function QuadroParticipacao() {
         keyboardType="numeric"
       />
 
-      <TouchableOpacity style={styles.button} onPress={() => {
-        Alert.alert("Pronto!","Participação confirmada!",[
-          {
-            text: "OK",
-            onPress: () => navigation.navigate("Home"), // nome da rota da Home
-          },
-        ]
-        );
-      }}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleParticipar}>
         <Text style={styles.buttonText}>Participar</Text>
       </TouchableOpacity>
     </View>
