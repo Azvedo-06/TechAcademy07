@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "titulo": "Jogos Abertos do Parána",
+    "data": "2025-11-28",
+    "imagem": "jogos_do_parana_2025.png",
+    "local": [{ "espacos": "Complexo Esportivo Roberto Brzezinski" }],
+    "descricao": "Aprenda a cultivar plantas em casa",
+    "descriptionModal": "Os Jogos Abertos do Paraná são uma celebração anual do esporte que reúne atletas de todas as regiões do estado. Com competições em diversas modalidades.",
+    "isEvent": true
+  }
+]

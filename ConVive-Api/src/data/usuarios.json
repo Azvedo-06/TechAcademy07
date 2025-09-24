@@ -1,0 +1,7 @@
+{
+  "id": 1,
+  "nome": "André Roberto",
+  "telefone": "449999999",
+  "cpf": "12345678901",
+  "isAdmin": true
+}
