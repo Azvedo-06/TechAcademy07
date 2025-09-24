@@ -4,6 +4,7 @@ export const Mock = [
   // imagem = pode ser uma URL ou um require de uma imagem local
   // descriptionCard = descrição do informativo no card
   // descriptionModal = descrição detalhada do informativo no modal
+  // isEvent = booleano para indicar se é um evento (true) ou não (false ou omitido)
   {
     id: "1",
     name: "Eventos",
@@ -13,12 +14,14 @@ export const Mock = [
         title: "Oficina de Jardinagem",
         data: "2025-09-15",
         imagem: "",
+        isEvent: true,
       },
       {
         id: "2",
         title: "Piquenique Comunitário",
         data: "2025-10-20",
         imagem: "",
+        isEvent: true,
       },
       {
         id: "3",
@@ -26,6 +29,7 @@ export const Mock = [
         data: "2025-11-28",
         imagem: require("../assets/imagens/jogos_do_parana_2025.png"),
         local: [{Espaços: "Complexo Esportivo Roberto Brzezinski"}],
+        isEvent: true,
         descriptionModal: "Os Jogos Abertos do Paraná são uma celebração anual do esporte que reúne atletas de todas as regiões do estado. Com competições em diversas modalidades.",
       },
     ],

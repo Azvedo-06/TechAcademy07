@@ -10,8 +10,6 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-
-
 export default function ModalCard({
   modalVisible,
   setModalVisible,
@@ -41,22 +39,31 @@ export default function ModalCard({
                   />
                 ) : null}
                 <Text style={styles.modalTitle}>{selectedItem.title}</Text>
-                {selectedItem.descriptionModal ? <Text style={styles.modalDescription}>{selectedItem.descriptionModal}</Text> : null}
+                {selectedItem.descriptionModal ? (
+                  <Text style={styles.modalDescription}>
+                    {selectedItem.descriptionModal}
+                  </Text>
+                ) : null}
               </>
             )}
+            {selectedItem?.isEvent && (
+              <TouchableOpacity
+                onPress={() => {
+                  // Aqui você ajusta a rota
+                  navigation.navigate("Participe", {item: selectedItem});
+                  setModalVisible(false);
+                }}
+                style={{ marginTop: 15 }}
+              >
+                <Text style={{ color: "green", fontWeight: "bold" }}>
+                  Participe
+                </Text>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={{ color: "blue", marginTop: 20 }}>Fechar</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-          onPress={() => {
-            // Aqui você ajusta a rota real depois
-            navigation.navigate("Participe");
-            setModalVisible(false);
-          }} 
-          style={{ marginTop: 15 }}
-        >
-          <Text style={{ color: "green", fontWeight: "bold" }}>Participe</Text>
-        </TouchableOpacity>
           </ScrollView>
         </View>
       </View>
