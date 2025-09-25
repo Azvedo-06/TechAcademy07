@@ -15,7 +15,7 @@ export default class DataService {
     return JSON.parse(raw);
   }
 
-  async writeAll(products) {
-    await fs.writeFile(this.dataPath, JSON.stringify(products, null, 2), 'utf8');
+  async writeAll(data) {
+    await fs.writeFile(this.dataPath, JSON.stringify(data, null, 2), 'utf8');
   }
 }

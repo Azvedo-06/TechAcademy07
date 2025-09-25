@@ -3,6 +3,7 @@ dotoenv.config()
 import cors from 'cors';
 import express from 'express';
 import eventsRouter from './routes/eventsRoutes.js';
+import usersRouter from './routes/usersRoutes.js';
 
 const app = express();
 app.use(cors({origin: '*'}));
@@ -10,6 +11,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.json({success: true, message: 'API ConVive OK'}));
 app.use('/eventos', eventsRouter);
+app.use('/usuarios', usersRouter);
 
 app.use((req, res) => res.status(404).json({ success: false, message: 'Rota não encontrada' }));
 

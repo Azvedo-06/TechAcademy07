@@ -1,7 +1,16 @@
-{
-  "id": 1,
-  "nome": "André Roberto",
-  "telefone": "449999999",
-  "cpf": "12345678901",
-  "isAdmin": true
-}
+[
+  {
+    "id": 1,
+    "name": "André Roberto",
+    "telefone": "449999999",
+    "cpf": "12345678901",
+    "isAdmin": true
+  },
+  {
+    "id": 2,
+    "name": "Maria",
+    "cpf": "123456789-09",
+    "telefone": "44999844167",
+    "isAdim": false
+  }
+]
