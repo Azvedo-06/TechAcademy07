@@ -25,3 +25,29 @@ export const createUser = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params; 
+    let usuarios = await dataService.readAll();
+
+    // procura o usuário
+    const index = usuarios.findIndex(user => String(user.id) === String(id));
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+
+    // remove usuário
+    const [deletedUser] = usuarios.splice(index, 1);
+
+    await dataService.writeAll(usuarios);
+
+    return res.json({
+      message: "Usuário deletado com sucesso",
+      user: deletedUser,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
