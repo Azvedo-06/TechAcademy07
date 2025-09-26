@@ -1,65 +1,93 @@
-import React, { useState } from "react";
-import { View, Text, FlatList, StyleSheet,
-RefreshControl} from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, Text, FlatList, StyleSheet, RefreshControl, ActivityIndicator, Alert } from "react-native";
+import { useFocusEffect } from '@react-navigation/native';
 import Card from "../components/Card";
 import ModalCard from "../components/Modal";
 import BotaoCriarEvento from "../components/CreateEvent";
+import { getEvents, getAtividades, getEspacos, getInformativos} from "../data/api";
 
 export default function CategoriaScreen({ route }) {
   const { categoria } = route.params; // categoria enviada do HomeScreen
-  const dados = categoria.items || []; // pega os itens do mock
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   // estados para o modal
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // estado para os itens exibidos
-  const [items, setItems] = useState(dados);
-  const [loading, setLoading] = useState(false);
+  // Função que busca os dados corretos da API conforme a categoria
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      let data = [];
+       if (categoria.id === "eventos") {
+        data = await getEvents();
+      } else if (categoria.id === "atividades") {
+        data = await getAtividades();
+      } else if (categoria.id === "espacos") {
+        data = await getEspacos();
+      } else if (categoria.id === "informativos") {
+        data = await getInformativos();
+      }
+
+      setItems(data);
+    } catch (err) {
+      Alert.alert("Erro", "Não foi possível carregar os dados.");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  // Sempre que a tela voltar ao foco, recarregar os dados
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [categoria.id])
+  );
 
   // estados para o modal
   const handleItemPress = (item) => {
-  setSelectedItem(item); 
-  setModalVisible(true);
-  }
-
-  // função de refresh
-  const reload = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setItems(dados);
-      setLoading(false);
-    }, 1000);
+    setSelectedItem(item);
+    setModalVisible(true);
   };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#000" style={{ flex: 1 }} />;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{categoria.name}</Text>
 
       <FlatList
-        data={dados}
+        data={items}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <Card item={item} onPress={() => handleItemPress(item)} />}
-        
-        
+        renderItem={({ item }) => (
+          <Card item={item} onPress={() => handleItemPress(item)} />
+        )}
         ListEmptyComponent={
           <View style={{ alignItems: "center", padding: 24 }}>
-            <Text>Nenhum produto cadastrado.</Text>
+            <Text>Nenhum {categoria.name.toLowerCase()} cadastrado.</Text>
           </View>
         }
-
-        
-
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={reload} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        contentContainerStyle={items.length === 0 ? styles.listEmpty : styles.list}
-
-        
-        
+        contentContainerStyle={
+          items.length === 0 ? styles.listEmpty : styles.list
+        }
       />
-      <BotaoCriarEvento/>
-      <ModalCard 
+      
+      {categoria.id === "eventos" && <BotaoCriarEvento />}
+
+      <ModalCard
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         selectedItem={selectedItem}

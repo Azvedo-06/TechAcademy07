@@ -30,11 +30,33 @@ export async function getUsers() {
   return handleResponse(res);
 }
 
+// ---- Eventos ---- //
 export async function getEvents() {
   const res = await fetchWithTimeout(`${API_URL}/eventos`, { timeout: 8000 });
   return handleResponse(res);
 }
 
+export async function createEvent(event) {
+  try {
+    const res = await fetch(`${API_URL}/eventos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(event),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Erro: ${text}`);
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error("[createEvent] Erro:", err);
+    throw err;
+  }
+}
+
+// ---- Informativos ---- //
 export async function getInformativos() {
   const res = await fetchWithTimeout(`${API_URL}/informativos`, { timeout: 8000 });
   return handleResponse(res);

@@ -1,21 +1,51 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { createEvent } from "../data/api";
 
-export default function CriarEventoScreen({ navigation }) {
-  const [nome, setNome] = useState("");
-  const [data, setData] = useState("");
+export default function CriarEventoScreen({ navigation, route }) {
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [local, setLocal] = useState("");
+  const [imagem, setImagem] = useState("");
+  const [descriptionCard, setDescriptionCard] = useState("");
+  const [descriptionModal, setDescriptionModal] = useState("");
 
-  const handleSalvar = () => {
-    if (!nome || !data) {
-      Alert.alert("Atenção!","Preencha todos os campos.");
+  const handleSalvar = async () => {
+    if (!name || !date) {
+      Alert.alert("Atenção!", "Preencha todos os campos.");
       return;
     }
 
-    // Aqui você pode salvar no backend, AsyncStorage, contexto etc.
-    Alert.alert("Evento criado!",`\nNome: ${nome}\nData: ${data}`);
+    try {
+      const novoEvento = {
+        title: name,
+        date: date,
+        imagem: imagem || '', // ou algum valor padrão
+        local: [{ espacos: local || "Local não informado" }], // evita erro
+        descriptionCard: descriptionCard || "",
+        descriptionModal: descriptionModal || "",
+        isEvent: true,
+      };
 
-    // Se quiser voltar para a tela anterior:
-    navigation.goBack();
+      await createEvent(novoEvento);
+
+      // atualizar lista da CategoriaScreen se houver callback
+      if (route.params?.onCreate) {
+        route.params.onCreate();
+      }
+
+      Alert.alert("Sucesso!", "Evento criado com sucesso.");
+      navigation.goBack();
+    } catch (Error) {
+      Alert.alert(Error.message);
+    }
   };
 
   return (
@@ -26,16 +56,49 @@ export default function CriarEventoScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Digite o nome do evento"
-        value={nome}
-        onChangeText={setNome}
+        value={name}
+        onChangeText={setName}
       />
 
       <Text style={styles.label}>Data</Text>
       <TextInput
         style={styles.input}
-        placeholder="DD/MM/AAAA"
-        value={data}
-        onChangeText={setData}
+        placeholder="AAAA/MM/DD"
+        value={date}
+        onChangeText={setDate}
+      />
+
+      <Text style={styles.label}>Local</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite o local do evento"
+        value={local}
+        onChangeText={setLocal}
+      />
+
+      <Text style={styles.label}>URL da Imagem</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="https://exemplo.com/imagem.jpg"
+        value={imagem}
+        onChangeText={setImagem}
+      />
+
+      <Text style={styles.label}>Descrição curta</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Descrição curta"
+        value={descriptionCard}
+        onChangeText={setDescriptionCard}
+      />
+
+      <Text style={styles.label}>Descrição completa</Text>
+      <TextInput
+        style={[styles.input, { height: 80 }]}
+        placeholder="Descrição completa"
+        value={descriptionModal}
+        onChangeText={setDescriptionModal}
+        multiline
       />
 
       <TouchableOpacity style={styles.button} onPress={handleSalvar}>
