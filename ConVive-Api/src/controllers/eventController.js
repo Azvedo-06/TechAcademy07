@@ -1,6 +1,6 @@
 import DataService from "../services/dataService.js";
 import Event from "../models/eventModel.js";
-import { eventoValido, existeEventoNoMesmoDia} from "../utils/rules.js";
+import { eventoValido, existeEventoNoMesmoDia} from "../utills/rules.js";
 
 // Inicialize o serviço de dados com o caminho do arquivo JSON
 const dataService = new DataService("eventos.json");

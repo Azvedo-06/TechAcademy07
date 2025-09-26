@@ -4,7 +4,7 @@ import {
   validarNome,
   validarCPF,
   validarTelefone,
-} from "../utils/validators.js";
+} from "../utills/validator.js";
 
 const dataService = new DataService("usuarios.json");
 

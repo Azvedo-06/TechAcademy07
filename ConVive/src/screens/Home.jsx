@@ -1,20 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  Image,
+  ActivityIndicator ,
 } from "react-native";
-import { Mock } from "../data/Mock";
+//import { Mock } from "../data/Mock";
+import { getEvents, getAtividades, getEspacos, getInformativos} from "../data/api";
 
 export default function HomeScreen({ navigation }) {
+  const [categorias, setCategorias] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchCategorias() {
+      try {
+        // buscar eventos da API
+        const eventos = await getEvents();
+        const atividades = await getAtividades();
+        const espacos = await getEspacos();
+        const informativos = await getInformativos();
+
+        const data = [
+          { id: "eventos", name: "Eventos", items: eventos },
+          { id: "atividades", name: "Atividades", items: atividades },
+          { id: "espacos", name: "Espaços", items: espacos },
+          { id: "informativos", name: "Informativos", items: informativos },
+        ];
+
+        setCategorias(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCategorias();
+  }, []);
+
+  if (loading) return <ActivityIndicator size="large" color="#000" />;
+  if (error) return <Text>Erro: {error}</Text>;
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Comunidade que se vive</Text>
       <FlatList
-        data={Mock}
+        data={categorias}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity

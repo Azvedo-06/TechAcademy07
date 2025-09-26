@@ -9,7 +9,7 @@
         "espacos": "Complexo Esportivo Roberto Brzezinski"
       }
     ],
-    "description": "Os Jogos Abertos do Paraná são uma celebração anual do esporte",
+    "descriptionCard": "Os Jogos Abertos do Paraná são uma celebração anual do esporte",
     "descriptionModal": "Os Jogos Abertos do Paraná são uma celebração anual do esporte que reúne atletas de todas as regiões do estado. Com competições em diversas modalidades.",
     "isEvent": true
   },
@@ -23,7 +23,7 @@
         "espacos": "Bosque do lago"
       }
     ],
-    "description": "Aprenda a cultivar plantas em casa",
+    "descriptionCard": "Aprenda a cultivar plantas em casa",
     "descriptionModal": "",
     "isEvent": true
   }
