@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ParticipeScreen from "../screens/ParticipeScreen"
 import HomeScreen from "../screens/Home";
 import CategoriaScreen from "../screens/CategoriaScreen";
+import CriarEventoScreen from "../screens/CreateEventScreen";
 
 const Stack = createNativeStackNavigator();
 export function AppNavigation() {
@@ -25,6 +26,10 @@ export function AppNavigation() {
         <Stack.Screen
           name="Participe"
           component={ParticipeScreen}
+        />
+        <Stack.Screen
+          name="Criar"
+          component={CriarEventoScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
