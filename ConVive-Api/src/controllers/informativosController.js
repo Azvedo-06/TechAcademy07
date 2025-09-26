@@ -14,13 +14,11 @@ export const getAllInformativos = async (req, res) => {
 
 export const createInformativo = async (req, res) => {
   try {
-    const informativos = (await dataService.readAll()) || [];
-    const informativo = new Informativo(req.body);
+    const informativo = new Informativo({id:null, ...req.body});
 
-    informativos.push(informativo);
-    await dataService.writeAll(informativos);
+    const novoInformativo = await dataService.create(informativo);
 
-    return res.status(201).json(informativo);
+    return res.status(201).json(novoInformativo);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

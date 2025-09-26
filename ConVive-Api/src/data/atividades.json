@@ -1,12 +1,12 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "title": "Aula de Dança",
     "descriptionCard": "Venha aprender passos de dança variados em nossas aulas semanais.",
     "descriptionModal": "Nossas aulas de dança são abertas para todas as idades e níveis de habilidade. Ministradas por instrutores experientes, as aulas cobrem diversos estilos, incluindo salsa, forró, dança contemporânea e hip-hop. Traga sua energia e prepare-se para se divertir enquanto aprende novos movimentos!"
   },
   {
-    "id": "2",
+    "id": 2,
     "title": "Treino de Atletismo",
     "descriptionCard": "Participe dos nossos treinos de atletismo para melhorar sua resistência e velocidade.",
     "descriptionModal": "Os treinos de atletismo são projetados para corredores de todos os níveis, desde iniciantes até atletas experientes. Nossos treinadores especializados focam em técnicas de corrida, fortalecimento muscular e estratégias de competição. Junte-se a nós para alcançar seus objetivos atléticos em um ambiente motivador e de apoio."

@@ -1,5 +1,6 @@
 import DataService from "../services/dataService.js";
 import Event from "../models/eventModel.js";
+import { eventoValido, existeEventoNoMesmoDia} from "../utils/rules.js";
 
 // Inicialize o serviço de dados com o caminho do arquivo JSON
 const dataService = new DataService("eventos.json");
@@ -18,13 +19,21 @@ export const getAllEvents = async (req, res) => {
 // create a new event
 export const createEvent = async (req, res) => {
   try {
-    const eventos = (await dataService.readAll()) || []; // garante array
-    const event = new Event(req.body);
+    const eventos = await dataService.readAll()
+    const event = new Event({...req.body});
 
-    eventos.push(event);
-    await dataService.writeAll(eventos);
+    // regra de negócio: data tem que ser futura
+    if (!eventoValido(event)) {
+      return res.status(400).json({ error: 'Evento precisa ter uma data futura!' });
+    }
 
-    return res.status(201).json(event);
+    // regra: não permitir dois eventos no mesmo dia
+    if (existeEventoNoMesmoDia(eventos, event)) {
+      return res.status(400).json({ error: 'Já existe um evento cadastrado nessa data!' });
+    }
+
+    const novoEvento = await dataService.create(event);
+    return res.status(201).json(novoEvento);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -67,8 +76,17 @@ export const updateEvent = async (req, res) => {
     if (index === -1) {
       return res.status(404).json({ error: "Evento não encontrado" });
     }
-
     const updatedEvent = { ...eventos[index], ...req.body };
+    
+    // regra de negócio: data tem que ser futura
+    if (!eventoValido(updatedEvent)) {
+      return res.status(400).json({ error: 'Evento precisa ter uma data futura!' });
+    }
+
+    // regra: não permitir dois eventos no mesmo dia
+    if (existeEventoNoMesmoDia(eventos.filter(e => e.id !== updatedEvent.id), updatedEvent)) {
+      return res.status(400).json({ error: 'Já existe um evento cadastrado nessa data!' });
+    }
 
     // substitui no array
     eventos[index] = updatedEvent;

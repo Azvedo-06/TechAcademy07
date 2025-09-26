@@ -14,13 +14,11 @@ export const getAllEspacos = async (req, res) => {
 
 export const createEspaco = async (req, res) => {
     try {
-        const espacos = (await dataService.readAll()) || [];
-        const espaco = new Espacos(req.body);
+        const espaco = new Espacos({ id: null, ...req.body });
 
-        espacos.push(espaco);
-        await dataService.writeAll(espacos);
-
-        return res.status(201).json(espaco);
+        const novoEspaco = await dataService.create(espaco);
+        
+        return res.status(201).json(novoEspaco);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }

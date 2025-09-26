@@ -1,5 +1,5 @@
 export default class Informativo {
-    constructor({ id, title, data, descriptionCard, descriptionModal }) {
+    constructor({ id = null, title, data, descriptionCard, descriptionModal }) {
         this.id = id;
         this.title = title;
         this.data = data;

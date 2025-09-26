@@ -1,5 +1,5 @@
 export default class User {
-    constructor({ id, name, cpf, telefone, isAdim = false }) {
+    constructor({ id = null, name, cpf, telefone, isAdim = false }) {
         this.id = id;
         this.name = name;
         this.cpf = cpf; 

@@ -1,5 +1,5 @@
 export default class Event {
-    constructor({ id, title, date ,imagem = '', local = [], description = '', descriptionModal = '', isEvent = true }) {
+    constructor({ id = null, title, date ,imagem = '', local = [], description = '', descriptionModal = '', isEvent = true }) {
       this.id = id;
       this.title = title;
       this.date = date;

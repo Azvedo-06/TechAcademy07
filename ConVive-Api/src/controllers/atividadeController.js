@@ -14,13 +14,10 @@ export const getAllAtividades = async (req, res) => {
 
 export const createAtividade = async (req, res) => {
   try {
-        const atividades = (await dataService.readAll()) || [];
-        const atividade = new Atividade(req.body);
+        const atividade = new Atividade({id:null, ...req.body});
+        const novaAtividade = await dataService.create(atividade);
         
-        atividades.push(atividade);
-        
-        await dataService.writeAll(atividades);
-        return res.status(201).json(atividade);
+        return res.status(201).json(novaAtividade);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
