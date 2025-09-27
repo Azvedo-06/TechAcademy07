@@ -12,11 +12,9 @@ export default function CategoriaScreen({ route }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // estados para o modal
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // Função que busca os dados corretos da API conforme a categoria
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -40,14 +38,12 @@ export default function CategoriaScreen({ route }) {
     }
   };
 
-  // Sempre que a tela voltar ao foco, recarregar os dados
   useFocusEffect(
     useCallback(() => {
       fetchData();
     }, [categoria.id])
   );
 
-  // estados para o modal
   const handleItemPress = (item) => {
     setSelectedItem(item);
     setModalVisible(true);

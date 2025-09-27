@@ -2,11 +2,8 @@ import DataService from "../services/dataService.js";
 import Event from "../models/eventModel.js";
 import { eventoValido, existeEventoNoMesmoDia} from "../utills/rules.js";
 
-// Inicialize o serviço de dados com o caminho do arquivo JSON
 const dataService = new DataService("eventos.json");
 
-// crud completa de eventos (create, read, update, delete)
-// get all events
 export const getAllEvents = async (req, res) => {
   try {
     const eventos = await dataService.readAll();
@@ -16,7 +13,6 @@ export const getAllEvents = async (req, res) => {
   }
 };
 
-// create a new event
 export const createEvent = async (req, res) => {
   try {
     const eventos = await dataService.readAll()
@@ -39,7 +35,6 @@ export const createEvent = async (req, res) => {
   }
 };
 
-// delete event
 export const deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -64,13 +59,11 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
-// update event
 export const updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
     let eventos = await dataService.readAll();
 
-    // encontra o evento pelo id
     const index = eventos.findIndex((event) => String(event.id) === String(id));
 
     if (index === -1) {
@@ -88,7 +81,6 @@ export const updateEvent = async (req, res) => {
       return res.status(400).json({ error: 'Já existe um evento cadastrado nessa data!' });
     }
 
-    // substitui no array
     eventos[index] = updatedEvent;
 
     await dataService.writeAll(eventos);

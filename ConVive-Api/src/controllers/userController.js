@@ -44,14 +44,12 @@ export const deleteUser = async (req, res) => {
     const { id } = req.params;
     let usuarios = await dataService.readAll();
 
-    // procura o usuário
     const index = usuarios.findIndex((user) => String(user.id) === String(id));
 
     if (index === -1) {
       return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
-    // remove usuário
     const [deletedUser] = usuarios.splice(index, 1);
 
     await dataService.writeAll(usuarios);

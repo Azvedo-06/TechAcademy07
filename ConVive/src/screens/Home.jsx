@@ -7,7 +7,6 @@ import {
   FlatList,
   ActivityIndicator ,
 } from "react-native";
-//import { Mock } from "../data/Mock";
 import { getEvents, getAtividades, getEspacos, getInformativos} from "../data/api";
 
 export default function HomeScreen({ navigation }) {
@@ -18,7 +17,6 @@ export default function HomeScreen({ navigation }) {
   useEffect(() => {
     async function fetchCategorias() {
       try {
-        // buscar eventos da API
         const eventos = await getEvents();
         const atividades = await getAtividades();
         const espacos = await getEspacos();

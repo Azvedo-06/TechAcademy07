@@ -2,21 +2,18 @@ import { Platform } from 'react-native';
 
 const PORT = 3333;
 
-/**
- * Se usar CELULAR FÍSICO, preencha com o IPv4 do seu PC.
- * Ex.: '192.168.0.105'
- */
-const FORCE_LAN_IP = '192.168.0.105'; // deixe vazio para Web/Emulador
+
+const FORCE_LAN_IP = '192.168.0.105';
 
 const isWeb = Platform.OS === 'web';
 const isAndroid = Platform.OS === 'android';
 const isIOS = Platform.OS === 'ios';
 
 function resolveHost() {
-  if (FORCE_LAN_IP) return FORCE_LAN_IP;    // celular físico
-  if (isWeb) return 'localhost';            // Web: evita firewall da interface LAN
-  if (isAndroid) return '10.0.2.2';         // emulador Android
-  if (isIOS) return 'localhost';            // simulator iOS
+  if (FORCE_LAN_IP) return FORCE_LAN_IP;    
+  if (isWeb) return 'localhost';        
+  if (isAndroid) return '10.0.2.2';         
+  if (isIOS) return 'localhost';           
   return 'localhost';
 }
 

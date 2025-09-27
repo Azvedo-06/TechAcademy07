@@ -27,8 +27,8 @@ export default function CriarEventoScreen({ navigation, route }) {
       const novoEvento = {
         title: name,
         date: date,
-        imagem: imagem || '', // ou algum valor padrão
-        local: [{ espacos: local || "Local não informado" }], // evita erro
+        imagem: imagem || '', 
+        local: [{ espacos: local || "Local não informado" }], 
         descriptionCard: descriptionCard || "",
         descriptionModal: descriptionModal || "",
         isEvent: true,
@@ -36,7 +36,6 @@ export default function CriarEventoScreen({ navigation, route }) {
 
       await createEvent(novoEvento);
 
-      // atualizar lista da CategoriaScreen se houver callback
       if (route.params?.onCreate) {
         route.params.onCreate();
       }

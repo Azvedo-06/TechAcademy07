@@ -19,7 +19,6 @@ export default class DataService {
     await fs.writeFile(this.dataPath, JSON.stringify(data, null, 2), 'utf8');
   }
 
-  // retorna próximo ID auto-increment
   async getNextId() {
     const data = await this.readAll();
     if (!data.length) return 1;
@@ -27,7 +26,6 @@ export default class DataService {
     return Math.max(...ids) + 1;
   }
 
-  // cria um novo registro com ID auto-increment
   async create(item) {
     const data = await this.readAll();
     const id = await this.getNextId();

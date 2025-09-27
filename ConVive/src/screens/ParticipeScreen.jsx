@@ -17,8 +17,8 @@ export default function ParticipeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center", // centraliza verticalmente
-    alignItems: "center",     // centraliza horizontalmente
+    justifyContent: "center", 
+    alignItems: "center",     
     backgroundColor: "#fff",
     padding: 20,
   },
