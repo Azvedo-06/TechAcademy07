@@ -1,9 +1,9 @@
 import DataService from "../services/dataService.js";
-import Espacos from "../models/espacosModel.js";
+import Espacos from "../models/spacesModel.js";
 
 const dataService = new DataService("espacos.json");
 
-export const getAllEspacos = async (req, res) => {
+export const getAllSpaces = async (req, res) => {
     try {
         const espacos = await dataService.readAll();
         return res.json(espacos);
@@ -12,7 +12,7 @@ export const getAllEspacos = async (req, res) => {
     }
 }
 
-export const createEspaco = async (req, res) => {
+export const createSpaces = async (req, res) => {
     try {
         const espaco = new Espacos({ id: null, ...req.body });
 
@@ -24,7 +24,7 @@ export const createEspaco = async (req, res) => {
     }
 };
 
-export const deleteEspaco = async (req, res) => {
+export const deleteSpaces = async (req, res) => {
     try {
         const { id } = req.params;
         let espacos = await dataService.readAll();

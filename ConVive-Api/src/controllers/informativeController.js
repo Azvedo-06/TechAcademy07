@@ -1,9 +1,9 @@
 import DataService from "../services/dataService.js";
-import Informativo from "../models/informativosModel.js";
+import Informativo from "../models/informativeModel.js";
 
 const dataService = new DataService("informativos.json");
 
-export const getAllInformativos = async (req, res) => {
+export const getAllInformative = async (req, res) => {
   try {
     const informativos = await dataService.readAll();
     return res.json(informativos);
@@ -12,7 +12,7 @@ export const getAllInformativos = async (req, res) => {
   }
 };
 
-export const createInformativo = async (req, res) => {
+export const createInformative = async (req, res) => {
   try {
     const informativo = new Informativo({id:null, ...req.body});
 
@@ -24,7 +24,7 @@ export const createInformativo = async (req, res) => {
   }
 };
 
-export const deleteInformativo = async (req, res) => {
+export const deleteInformative = async (req, res) => {
   try {
     const { id } = req.params;
     let informativos = await dataService.readAll();

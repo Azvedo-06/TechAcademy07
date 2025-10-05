@@ -4,9 +4,9 @@ import cors from 'cors';
 import express from 'express';
 import eventsRouter from './routes/eventsRoutes.js';
 import usersRouter from './routes/usersRoutes.js';
-import informativosRouter from './routes/informativosRoutes.js';
-import espacosRouter from './routes/espacosRoutes.js';
-import atividadesRouter from './routes/atividadesRoutes.js';
+import informativeRouter from './routes/informativeRoutes.js';
+import spacesRouter from './routes/spacesRoutes.js';
+import activitiesRoutes from './routes/activitiesRoutes.js';
 
 const app = express();
 app.use(cors({origin: '*'}));
@@ -16,9 +16,9 @@ app.use(express.json());
 app.get('/', (req, res) => res.json({success: true, message: 'API ConVive OK'}));
 app.use('/eventos', eventsRouter);
 app.use('/usuarios', usersRouter);
-app.use('/informativos', informativosRouter);
-app.use('/espacos', espacosRouter); 
-app.use('/atividades', atividadesRouter);
+app.use('/informativos', informativeRouter);
+app.use('/espacos', spacesRouter); 
+app.use('/atividades', activitiesRoutes);
 
 app.use((req, res) => res.status(404).json({ success: false, message: 'Rota não encontrada' }));
 

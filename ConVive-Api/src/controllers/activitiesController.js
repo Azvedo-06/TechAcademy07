@@ -1,9 +1,9 @@
 import DataService from "../services/dataService.js";
-import Atividade from "../models/atividadeModel.js";
+import Atividade from "../models/activitiesModel.js";
 
 const dataService = new DataService("atividades.json");
 
-export const getAllAtividades = async (req, res) => {
+export const getAllActivities = async (req, res) => {
     try {
         const atividades = await dataService.readAll();
         return res.json(atividades);
@@ -12,7 +12,7 @@ export const getAllAtividades = async (req, res) => {
     }
 }
 
-export const createAtividade = async (req, res) => {
+export const createActivities = async (req, res) => {
   try {
         const atividade = new Atividade({id:null, ...req.body});
         const novaAtividade = await dataService.create(atividade);
@@ -23,7 +23,7 @@ export const createAtividade = async (req, res) => {
     }
 };
 
-export const deleteAtividade = async (req, res) => {
+export const deleteActivities = async (req, res) => {
     try {
         const { id } = req.params;
         let atividades = await dataService.readAll();
