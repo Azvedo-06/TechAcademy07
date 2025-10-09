@@ -6,6 +6,7 @@ import ParticipeScreen from "../screens/ParticipeScreen"
 import HomeScreen from "../screens/Home";
 import CategoriaScreen from "../screens/CategoriaScreen";
 import CriarEventoScreen from "../screens/CreateEventScreen";
+import EditScreen from "../screens/EditScreen";
 
 const Stack = createNativeStackNavigator();
 export function AppNavigation() {
@@ -30,6 +31,10 @@ export function AppNavigation() {
         <Stack.Screen
           name="Criar"
           component={CriarEventoScreen}
+        />
+        <Stack.Screen
+          name="Editar"
+          component={EditScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

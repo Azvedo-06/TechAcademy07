@@ -7,15 +7,44 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { deleteEvent } from "../data/api";
 
 export default function ModalCard({
   modalVisible,
   setModalVisible,
   selectedItem,
+  tipo,
+  onRefresh,
 }) {
   const navigation = useNavigation();
+
+  async function handleDelete() {
+    Alert.alert("Excluir", "Deseja realmente excluir este item?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            switch (tipo) {
+              case "eventos":
+                await deleteEvent(selectedItem.id);
+                break;
+            }
+            Alert.alert("Excluído", "Item removido com sucesso!");
+            setModalVisible(false);
+            onRefresh && onRefresh();
+          } catch (err) {
+            Alert.alert("Erro", err.message);
+          }
+        },
+      },
+    ]);
+  }
+
   return (
     <Modal
       visible={modalVisible}
@@ -46,24 +75,36 @@ export default function ModalCard({
                 ) : null}
               </>
             )}
-            {selectedItem?.isEvent && (
-              <TouchableOpacity
-                onPress={() => {
-                  // Aqui você ajusta a rota
-                  navigation.navigate("Participe", {item: selectedItem});
-                  setModalVisible(false);
-                }}
-                style={{ marginTop: 15 }}
-              >
-                <Text style={{ color: "green", fontWeight: "bold" }}>
-                  Participe
-                </Text>
-              </TouchableOpacity>
-            )}
+            <View style={styles.ContentButton}>
+              {selectedItem?.isEvent && (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Participe", { item: selectedItem });
+                    setModalVisible(false);
+                  }}
+                  style={styles.button}
+                >
+                  <Text style={styles.textButton}>Participe</Text>
+                </TouchableOpacity>
+              )}
 
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text style={{ color: "blue", marginTop: 20 }}>Fechar</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={handleDelete}>
+                <Text style={styles.textButton}>Excluir</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button}
+                onPress={() => {navigation.navigate("Editar", {item: selectedItem, tipo}); setModalVisible(false);
+                }}>
+                <Text style={styles.textButton}>Editar</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.textButton}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         </View>
       </View>
@@ -99,5 +140,21 @@ const styles = StyleSheet.create({
   modalDescription: {
     fontSize: 14,
     color: "#333",
+  },
+  ContentButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    padding: 15,
+  },
+  button: {
+    backgroundColor: "#d1d0d0ff",
+    margin: 5,
+    padding: 4,
+    borderRadius: 5,
+  },
+  textButton: {
+    fontWeight: "bold",
+    textAlign: "center",
+    justifyContent: "center",
   },
 });

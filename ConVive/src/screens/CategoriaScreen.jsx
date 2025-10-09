@@ -87,6 +87,8 @@ export default function CategoriaScreen({ route }) {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         selectedItem={selectedItem}
+        tipo={categoria.id}
+        onRefresh={fetchData}
       />
     </View>
   );
