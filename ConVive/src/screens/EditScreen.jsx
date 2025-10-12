@@ -30,16 +30,29 @@ export default function EditarItemScreen({ route, navigation }) {
   }, [item]);
 
   const handleSave = async () => {
-    const dadosAtualizados = {
-      title: titulo,
-      date: data,
-      image: imagem,
-      local: localizacao,
-      descriptionCard: descricaoCard,
-      descriptionModal: descricaoModal,
-    };
+    //const dadosAtualizados = {
+    //  title: titulo,
+    //  date: data,
+    // image: imagem,
+    //  local: localizacao,
+    //  descriptionCard: descricaoCard,
+    // descriptionModal: descricaoModal,
+    //};
 
     try {
+      const dadosAtualizados = {}
+
+      if ("title" in item) dadosAtualizados.title = titulo;
+      if ("image" in item) dadosAtualizados.image = imagem;
+      if ("descriptionCard" in item)
+        dadosAtualizados.descriptionCard = descricaoCard;
+      if ("descriptionModal" in item)
+        dadosAtualizados.descriptionModal = descricaoModal;
+      if ("date" in item) {
+        dadosAtualizados.date = data;
+      }
+      if ("local" in item) dadosAtualizados.local = localizacao;
+
       switch (tipo) {
         case "eventos":
           await updateEvent(item.id, dadosAtualizados);
@@ -58,7 +71,8 @@ export default function EditarItemScreen({ route, navigation }) {
       Alert.alert("Sucesso", "Item atualizado!");
       navigation.goBack();
     } catch (err) {
-      Alert.alert("Erro: ", err.message)
+      console.log(`${API_URL}/${tipo}/${item.id}`);
+      Alert.alert("Erro: ", err.message);
     }
   };
 

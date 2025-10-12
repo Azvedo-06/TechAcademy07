@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/', getAllActivities);
 router.post('/', createActivities);
-router.put('/id', updateActivities);
+router.put('/:id', updateActivities);
 router.delete('/:id', deleteActivities);
 
 export default router;

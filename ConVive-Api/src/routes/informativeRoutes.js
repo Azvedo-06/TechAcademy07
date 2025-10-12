@@ -6,6 +6,6 @@ const router = Router();
 router.get("/", getAllInformative);
 router.post("/", createInformative);
 router.delete("/:id", deleteInformative);
-router.put('/id', updateInformatives);
+router.put('/:id', updateInformatives);
 
 export default router;

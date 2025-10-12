@@ -6,6 +6,6 @@ const router = Router();
 router.get('/', getAllSpaces);
 router.post('/', createSpaces);
 router.delete('/:id', deleteSpaces);
-router.put('/id', updateSpaces)
+router.put('/:id', updateSpaces)
 
 export default router;

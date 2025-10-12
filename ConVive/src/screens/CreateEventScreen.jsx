@@ -28,7 +28,7 @@ export default function CriarEventoScreen({ navigation, route }) {
         title: name,
         date: date,
         imagem: imagem || '', 
-        local: [{ espacos: local || "Local não informado" }], 
+        local: local || "Local não informado", 
         descriptionCard: descriptionCard || "",
         descriptionModal: descriptionModal || "",
         isEvent: true,

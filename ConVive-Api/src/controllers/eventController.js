@@ -1,6 +1,11 @@
 import DataService from "../services/dataService.js";
 import Event from "../models/eventModel.js";
-import { eventoValido, existeEventoNoMesmoDia} from "../utills/rules.js";
+import {
+  eventoValido,
+  existeEventoNoMesmoDia,
+  formatarData,
+  validarDataFormato,
+} from "../utills/rules.js";
 
 const dataService = new DataService("eventos.json");
 
@@ -15,17 +20,28 @@ export const getAllEvents = async (req, res) => {
 
 export const createEvent = async (req, res) => {
   try {
-    const eventos = await dataService.readAll()
-    const event = new Event({...req.body});
+    const eventos = await dataService.readAll();
+    const event = new Event({ ...req.body });
 
     // regra de negócio: data tem que ser futura
     if (!eventoValido(event)) {
-      return res.status(400).json({ error: 'Evento precisa ter uma data futura!' });
+      return res
+        .status(400)
+        .json({ error: "Evento precisa ter uma data futura!" });
     }
 
     // regra: não permitir dois eventos no mesmo dia
     if (existeEventoNoMesmoDia(eventos, event)) {
-      return res.status(400).json({ error: 'Já existe um evento cadastrado nessa data!' });
+      return res
+        .status(400)
+        .json({ error: "Já existe um evento cadastrado nessa data!" });
+    }
+
+    // Valida a data
+    if (!validarDataFormato(event.date)) {
+      return res
+        .status(400)
+        .json({ error: "Data inválida. Use o formato AAAA/MM/DD." });
     }
 
     const novoEvento = await dataService.create(event);
@@ -70,15 +86,34 @@ export const updateEvent = async (req, res) => {
       return res.status(404).json({ error: "Evento não encontrado" });
     }
     const updatedEvent = { ...eventos[index], ...req.body };
-    
+
     // regra de negócio: data tem que ser futura
     if (!eventoValido(updatedEvent)) {
-      return res.status(400).json({ error: 'Evento precisa ter uma data futura!' });
+      return res
+        .status(400)
+        .json({ error: "Evento precisa ter uma data futura!" });
     }
 
     // regra: não permitir dois eventos no mesmo dia
-    if (existeEventoNoMesmoDia(eventos.filter(e => e.id !== updatedEvent.id), updatedEvent)) {
-      return res.status(400).json({ error: 'Já existe um evento cadastrado nessa data!' });
+    if (
+      existeEventoNoMesmoDia(
+        eventos.filter((e) => e.id !== updatedEvent.id),
+        updatedEvent
+      )
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Já existe um evento cadastrado nessa data!" });
+    }
+
+     if (updatedEvent.date) {
+      const dataObj = new Date(updatedEvent.date);
+      updatedEvent.date = formatarData(dataObj);
+    }
+
+    // Valida a data
+    if (!validarDataFormato(updatedEvent.date)) {
+      return res.status(400).json({ error: 'Data inválida. Use o formato AAAA/MM/DD.' });
     }
 
     eventos[index] = updatedEvent;

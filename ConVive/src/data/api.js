@@ -114,7 +114,7 @@ export async function createInformativos(informativo) {
   return handleResponse(res);
 }
 
-export async function updateInformativos(dadosAtualizados, id) {
+export async function updateInformativos(id, dadosAtualizados) {
   const res = await fetch(`${API_URL}/informativos/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -146,7 +146,7 @@ export async function createEspacos(espaco) {
   return handleResponse(res);
 }
 
-export async function updateEspacos(dadosAtualizados, id) {
+export async function updateEspacos(id, dadosAtualizados) {
   const res = await fetch(`${API_URL}/espacos/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -179,7 +179,7 @@ export async function createAtividades(atividade) {
   return handleResponse(res);
 }
 
-export async function updateAtividades(dadosAtualizados, id) {
+export async function updateAtividades(id, dadosAtualizados) {
   const res = await fetch(`${API_URL}/atividades/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
