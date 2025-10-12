@@ -62,3 +62,30 @@ export const deleteUser = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const updateUsers = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let usuarios = await dataService.readAll();
+
+    const index = usuarios.findIndex((usuario) => String(usuario.id) === String(id));
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+    const updateUser = { ...usuarios[index], ...req.body };
+    
+    // regra de negócio...
+
+    usuarios[index] = updateUser;
+
+    await dataService.writeAll(usuarios);
+
+    return res.json({
+      message: "Usuário atualizado com sucesso",
+      espaço: updateUser,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

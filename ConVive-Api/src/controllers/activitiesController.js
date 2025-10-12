@@ -44,3 +44,30 @@ export const deleteActivities = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 };
+
+export const updateActivities = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let atividades = await dataService.readAll();
+
+    const index = atividades.findIndex((atividade) => String(atividade.id) === String(id));
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Atividade não encontrado" });
+    }
+    const updatedActivitie = { ...atividades[index], ...req.body };
+    
+    // regra de negócio...
+
+    atividades[index] = updatedActivitie;
+
+    await dataService.writeAll(atividades);
+
+    return res.json({
+      message: "Atividade atualizado com sucesso",
+      atividades: updatedActivitie,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

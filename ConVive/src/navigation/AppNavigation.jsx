@@ -19,7 +19,7 @@ export function AppNavigation() {
           options={{ title: "ConVive (Campo Mourão)" }}
         />
         <Stack.Screen
-          name="Categoria"
+          name="Categorias"
           component={CategoriaScreen}
           //options={({ route }) => ({title: route.params.categoria.name.toUpperCase()})}
           options={{ title: "ConVive (Campo Mourão)" }}

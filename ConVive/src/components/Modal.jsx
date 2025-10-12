@@ -10,7 +10,12 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { deleteEvent } from "../data/api";
+import {
+  deleteEvent,
+  deleteInformativos,
+  deleteAtividades,
+  deleteEspacos,
+} from "../data/api";
 
 export default function ModalCard({
   modalVisible,
@@ -32,6 +37,15 @@ export default function ModalCard({
             switch (tipo) {
               case "eventos":
                 await deleteEvent(selectedItem.id);
+                break;
+              case "informativos":
+                await deleteInformativos(selectedItem.id);
+                break;
+              case "atividades":
+                await deleteAtividades(selectedItem.id);
+                break;
+              case "espacos":
+                await deleteEspacos(selectedItem.id);
                 break;
             }
             Alert.alert("Excluído", "Item removido com sucesso!");
@@ -92,9 +106,13 @@ export default function ModalCard({
                 <Text style={styles.textButton}>Excluir</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.button}
-                onPress={() => {navigation.navigate("Editar", {item: selectedItem, tipo}); setModalVisible(false);
-                }}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  navigation.navigate("Editar", { item: selectedItem, tipo });
+                  setModalVisible(false);
+                }}
+              >
                 <Text style={styles.textButton}>Editar</Text>
               </TouchableOpacity>
 

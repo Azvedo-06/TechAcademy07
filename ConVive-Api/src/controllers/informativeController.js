@@ -48,3 +48,30 @@ export const deleteInformative = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const updateInformatives = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let informativos = await dataService.readAll();
+
+    const index = informativos.findIndex((informativo) => String(informativo.id) === String(id));
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Informativo não encontrado" });
+    }
+    const updateInformative = { ...informativos[index], ...req.body };
+    
+    // regra de negócio...
+
+    informativos[index] = updateInformative;
+
+    await dataService.writeAll(informativos);
+
+    return res.json({
+      message: "Atividade atualizado com sucesso",
+      informativo: updateInformative,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

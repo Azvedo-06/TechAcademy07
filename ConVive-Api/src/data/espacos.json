@@ -2,16 +2,16 @@
   {
     "id": 1,
     "title": "Praça Central (Catedral São José)",
-    "imagem": "praca.jpeg"
+    "image": "praca.jpeg"
   },
   {
     "id": 2,
     "title": "Complexo Esportivo Roberto Brzezinski",
-    "imagem": "estadio.jpg"
+    "image": "estadio.jpg"
   },
   {
     "id": 3,
     "title": "Bosque do Lago",
-    "imagem": "lago.jpg"
+    "image": "lago.jpg"
   }
 ]

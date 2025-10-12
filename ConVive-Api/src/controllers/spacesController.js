@@ -43,4 +43,31 @@ export const deleteSpaces = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-}
+};
+
+export const updateSpaces = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let espacos = await dataService.readAll();
+
+    const index = espacos.findIndex((espaco) => String(espaco.id) === String(id));
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Espaço não encontrado" });
+    }
+    const updateSpace = { ...espacos[index], ...req.body };
+    
+    // regra de negócio...
+
+    espacos[index] = updateSpace;
+
+    await dataService.writeAll(espacos);
+
+    return res.json({
+      message: "Espaço atualizado com sucesso",
+      espaço: updateSpace,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

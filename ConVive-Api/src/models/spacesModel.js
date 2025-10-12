@@ -1,7 +1,7 @@
 export default class spaces {
-    constructor({ id = null, title, imagem }) {
+    constructor({ id = null, title, image }) {
         this.id = id;
         this.title = title;
-        this.imagem = imagem;
+        this.image = image;
     }
 }

@@ -5,7 +5,7 @@ export default function Card({ item, onPress }) {
   return (
     <TouchableOpacity style={styles.card } onPress={onPress}>
       <Text style={styles.cardText}>{item.title}</Text>
-      {item.local ? <Text style={styles.cardDesc}>Local: {item.local.map(loc => Object.values(loc).join(", "))}</Text> : null}
+      {item.local ? <Text style={styles.cardDesc}>Local: {item.local}</Text> : null}
       {item.date ? <Text style={styles.cardDesc}>Data: {item.date}</Text> : null}
       {item.descriptionCard ? <Text style={styles.cardDesc}>{item.descriptionCard}</Text> : null}
     </TouchableOpacity>
