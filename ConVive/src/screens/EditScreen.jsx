@@ -9,7 +9,6 @@ import {
 
 export default function EditarItemScreen({ route, navigation }) {
   const { item, tipo } = route.params;
-  // criar o resto aqui pra baixo
   const [titulo, setTitulo] = useState("");
   const [data, setData] = useState("");
   const [imagem, setImagem] = useState("");
@@ -17,7 +16,6 @@ export default function EditarItemScreen({ route, navigation }) {
   const [descricaoCard, setDescricaoCard] = useState("");
   const [descricaoModal, setDescricaoModal] = useState("");
 
-  // criar o resto aqui pra baixo
   useEffect(() => {
     if (item) {
       setTitulo(item.title || "");
@@ -30,15 +28,6 @@ export default function EditarItemScreen({ route, navigation }) {
   }, [item]);
 
   const handleSave = async () => {
-    //const dadosAtualizados = {
-    //  title: titulo,
-    //  date: data,
-    // image: imagem,
-    //  local: localizacao,
-    //  descriptionCard: descricaoCard,
-    // descriptionModal: descricaoModal,
-    //};
-
     try {
       const dadosAtualizados = {}
 
