@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ParticipeScreen from "../screens/ParticipeScreen"
 import HomeScreen from "../screens/Home";
 import CategoriaScreen from "../screens/CategoriaScreen";
-import CriarEventoScreen from "../screens/CreateEventScreen";
+import CreateScreen from "../screens/CreateScreen";
 import EditScreen from "../screens/EditScreen";
 
 const Stack = createNativeStackNavigator();
@@ -21,7 +21,6 @@ export function AppNavigation() {
         <Stack.Screen
           name="Categorias"
           component={CategoriaScreen}
-          //options={({ route }) => ({title: route.params.categoria.name.toUpperCase()})}
           options={{ title: "ConVive (Campo Mourão)" }}
         />
         <Stack.Screen
@@ -30,7 +29,7 @@ export function AppNavigation() {
         />
         <Stack.Screen
           name="Criar"
-          component={CriarEventoScreen}
+          component={CreateScreen}
         />
         <Stack.Screen
           name="Editar"

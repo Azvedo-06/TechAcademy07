@@ -98,7 +98,7 @@ export async function getInformativos() {
   return handleResponse(res);
 }
 
-export async function deleteInfoormativos(id) {
+export async function deleteInformativos(id) {
   const res = await fetch(`${API_URL}/informativos/${id}`, {
     method: "DELETE",
   });

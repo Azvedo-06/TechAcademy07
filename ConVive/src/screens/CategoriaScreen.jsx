@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, RefreshControl, ActivityIndicator, Al
 import { useFocusEffect } from '@react-navigation/native';
 import Card from "../components/Card";
 import ModalCard from "../components/Modal";
-import BotaoCriarEvento from "../components/CreateEvent";
+import BotaoCriar from "../components/Create";
 import { getEvents, getAtividades, getEspacos, getInformativos} from "../data/api";
 
 export default function CategoriaScreen({ route }) {
@@ -81,7 +81,7 @@ export default function CategoriaScreen({ route }) {
         }
       />
       
-      {categoria.id === "eventos" && <BotaoCriarEvento />}
+      <BotaoCriar categoria={categoria} />
 
       <ModalCard
         modalVisible={modalVisible}

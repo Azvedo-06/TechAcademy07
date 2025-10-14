@@ -2,16 +2,16 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function BotaoCriarEvento({ onPress }) {
-
-    const navigation = useNavigation();
+export default function BotaoCriar({ categoria }) {
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={
-        () => navigation.navigate("Criar")
-      }>
-        <Text style={styles.text}>+ Criar Evento</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Criar", {tipo: categoria.id})}
+      >
+        <Text style={styles.text}>+ Criar {categoria.name} </Text>
       </TouchableOpacity>
     </View>
   );
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   button: {
-    backgroundColor: "#28a745", // verde para diferenciar
+    backgroundColor: "#28a745",
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,

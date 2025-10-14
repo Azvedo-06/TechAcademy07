@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 const PORT = 3333;
 
 
-const FORCE_LAN_IP = '192.168.0.106';
+const FORCE_LAN_IP = '192.168.0.109';
 
 const isWeb = Platform.OS === 'web';
 const isAndroid = Platform.OS === 'android';
