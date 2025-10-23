@@ -2,7 +2,7 @@ services:
   service-users:
     build: ./users
     ports:
-    - "3001:3000"
+      - "3001:3000"
     restart: always
     environment:
       DB_HOST: users-db
@@ -27,7 +27,34 @@ services:
       - users_data:/var/lib/postgresql/data
     networks:
       - backend
-  
+
+  service-events:
+    build: ./events
+    restart: always
+    environment:
+      DB_HOST: events-db
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: eventsdb
+      DB_PORT: 5432
+    depends_on:
+      - events-db
+    networks: [backend]
+
+  events-db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: eventsdb
+    ports:
+      - "5434:5432"
+    volumes:
+      - orders_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
   ngnix:
     image: nginx:alpine
     restart: always
