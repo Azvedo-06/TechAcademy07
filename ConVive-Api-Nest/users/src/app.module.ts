@@ -12,11 +12,11 @@ import { AppService } from './app.service';
     TypeOrmModule.forRootAsync({
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
-        host: cfg.get('DB_HOST', 'localhost'),
-        port: parseInt(cfg.get('DB_PORT', '5432')),
-        username: cfg.get('DB_USER', 'root'),
-        password: cfg.get('DB_PASS', 'root'),
-        database: cfg.get('DB_NAME', 'usersdb'),
+        host: cfg.get('DB_HOST'),
+        port: parseInt(cfg.get('DB_PORT', '5433')),
+        username: cfg.get('DB_USER'),
+        password: cfg.get('DB_PASS'),
+        database: cfg.get('DB_NAME'),
         entities: [User],
         synchronize: true, // DEV only
       }),

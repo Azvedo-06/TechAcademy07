@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-
     constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
     findAll() {
@@ -25,5 +24,15 @@ export class UsersService {
             throw new NotFoundException('Usuário não encontrado');
         }
         return user;
+    }
+
+    async delete(id: number) {
+        const user = await this.repo.findOne({ where: { id } });
+
+        if(!user) {
+            throw new NotFoundException('Usuário não encontrado');
+        }
+
+        return this.repo.delete(id);
     }
 }

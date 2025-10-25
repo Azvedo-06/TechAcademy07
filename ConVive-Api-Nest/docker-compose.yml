@@ -39,6 +39,7 @@ services:
       DB_PORT: 5432
     depends_on:
       - events-db
+      - service-users
     networks: [backend]
 
   events-db:
@@ -51,7 +52,7 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - orders_data:/var/lib/postgresql/data
+      - events_data:/var/lib/postgresql/data
     networks:
       - backend
 
@@ -68,7 +69,7 @@ services:
 
 volumes:
   users_data:
-  orders_data:
+  events_data:
 
 networks:
   backend:

@@ -1,4 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+} from 'typeorm';
 
 @Entity({ name: 'events' })
 export class Event {
@@ -14,12 +18,15 @@ export class Event {
   @Column()
   location: string;
 
-  @Column()
-  imageUrl: string;
+  @Column({ nullable: true })
+  imageUrl?: string;
 
   @Column()
   descriptionCard: string;
 
   @Column()
   descriptionModal: string;
+
+  @Column({nullable: true})
+  userId: number;
 }
