@@ -5,6 +5,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Event } from './events/Event.model';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { RedisService } from './redis/redis.service';
+import { RedisModule } from './redis/redis.module';
+import { HttpService } from './http/http.service';
+import { HttpModule } from './http/http.module';
 
 @Module({
   imports: [
@@ -23,8 +27,10 @@ import { AppService } from './app.service';
       inject: [ConfigService],
     }),
     EventsModule,
+    RedisModule,
+    HttpModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RedisService, HttpService],
 })
 export class AppModule {}

@@ -37,6 +37,9 @@ services:
       DB_PASS: postgres
       DB_NAME: eventsdb
       DB_PORT: 5432
+      USERS_API: http://service-users:3000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     depends_on:
       - events-db
       - service-users
@@ -55,6 +58,13 @@ services:
       - events_data:/var/lib/postgresql/data
     networks:
       - backend
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+    networks: [backend]
 
   ngnix:
     image: nginx:alpine
