@@ -1,10 +1,10 @@
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
   name: string;
 
-  @IsString({ message: 'CPF deve ser uma string' })
+  @IsString()
   cpf: string;
 
   @IsString()
@@ -16,6 +16,7 @@ export class CreateUserDto {
   @IsString()
   password: string;
   
+  @IsOptional()
   @IsBoolean()
-  isAdmin: boolean;
+  isAdmin: boolean = false;
 }

@@ -120,7 +120,7 @@ export class EventsService {
     event.descriptionCard = dto.descriptionCard ?? event.descriptionCard;
     event.descriptionModal = dto.descriptionModal ?? event.descriptionModal;
 
-    return await this.repo.save(event);
+    return await this.repo.save(event), { message: 'Evento atualizado com sucesso' };
   }
 
   async delete(id: number) {
@@ -130,6 +130,6 @@ export class EventsService {
       throw new NotFoundException('Evento não encontrado');
     }
 
-    return this.repo.delete(id);
+    return this.repo.delete(id), { message: 'Evento deletado com sucesso' }
   }
 }

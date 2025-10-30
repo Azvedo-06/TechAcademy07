@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './User.model';
 import { Repository } from 'typeorm';
@@ -41,13 +42,15 @@ export class UsersService {
       throw new BadRequestException('Senha deve ter no mínimo 6 caracteres');
     }
 
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
     const user = this.repo.create({
       name: dto.name,
       cpf: dto.cpf,
       phone: dto.phone,
       email: dto.email,
-      password: dto.password,
-      isAdmin: dto.isAdmin,
+      password: hashedPassword,
+      isAdmin: dto.isAdmin ?? false,
     });
     return this.repo.save(user);
   }
@@ -69,7 +72,7 @@ export class UsersService {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    return this.repo.delete(id);
+    return this.repo.delete(id), { message: 'Usuário deletado com sucesso' };
   }
 
   async update(id: number, dto: UpdateUserDto) {
@@ -95,12 +98,19 @@ export class UsersService {
       throw new BadRequestException('Senha deve ter no mínimo 6 caracteres');
     }
 
+    const hashedPassword = dto.password
+      ? await bcrypt.hash(dto.password, 10)
+      : user.password;
+
     user.name = dto.name ?? user.name;
     user.phone = dto.phone ?? user.phone;
     user.email = dto.email ?? user.email;
-    user.password = dto.password ?? user.password;
+    user.password = hashedPassword;
 
-    const saved = this.repo.save(user);
-    return saved;
+    return await this.repo.save(user), { message: 'Usuário atualizado com sucesso' };
+  }
+
+  async comparePasswords(password: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(password, hash);
   }
 }
