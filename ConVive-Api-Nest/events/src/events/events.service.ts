@@ -25,12 +25,8 @@ export class EventsService {
   }
 
   async create(dto: CreateEventDto) {
-    // Aqui você poderia validar se o userId existe na API de usuários
-    let user: any = await this.http.instance
-      .get(`/users/${dto.userId}`)
-      .catch(() => {
-        throw new NotFoundException('Usuário não encontrado');
-      });
+    //validar se o userId existe na API de usuários
+    let user: any = await this.getUserCache(dto);
 
     if (!user.data.isAdmin) {
       throw new ForbiddenException('Usuário não pode criar um evento');
@@ -73,6 +69,27 @@ export class EventsService {
     console.log('Published event_created event to Redis');
 
     return saved;
+  }
+
+  private async getUserCache(dto) {
+    const cacheKey = `user:${dto.userId}`;
+    const cacheUser = await this.redis.getClient().get(cacheKey);
+
+    if(cacheUser) {
+      console.log('User data retrieved from cache');
+      return JSON.parse(cacheUser)
+    }
+
+    const {data} = await this.http.instance
+      .get(`/users/${dto.userId}`)
+      .catch(() => {
+        throw new NotFoundException('Usuário não encontrado');
+      });
+
+    console.log("User data retrieved from users service, caching it now");
+    await this.redis.getClient().set(cacheKey, JSON.stringify(data), "EX", 60)
+
+    return data;
   }
 
   async findById(id: number) {

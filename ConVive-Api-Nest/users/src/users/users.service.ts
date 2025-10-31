@@ -12,7 +12,9 @@ import { UpdateUserDto } from './dto/updateUserDto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private repo: Repository<User>
+  ) {}
 
   findAll() {
     return this.repo.find();
@@ -72,7 +74,7 @@ export class UsersService {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    return this.repo.delete(id), { message: 'Usuário deletado com sucesso' };
+    return (this.repo.delete(id), { message: 'Usuário deletado com sucesso' });
   }
 
   async update(id: number, dto: UpdateUserDto) {
@@ -106,8 +108,15 @@ export class UsersService {
     user.phone = dto.phone ?? user.phone;
     user.email = dto.email ?? user.email;
     user.password = hashedPassword;
+    
+    return (
+      await this.repo.save(user),
+      { message: 'Usuário atualizado com sucesso' }
+    );
+  }
 
-    return await this.repo.save(user), { message: 'Usuário atualizado com sucesso' };
+  async findByEmail(email: string) {
+    return this.repo.findOne({ where: { email } });
   }
 
   async comparePasswords(password: string, hash: string): Promise<boolean> {

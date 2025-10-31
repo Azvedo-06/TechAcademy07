@@ -30,4 +30,9 @@ export class UsersController {
     updateUser(@Param('id') id: number, @Body() dto: CreateUserDto) {
         return this.userservice.update(id, dto);
     }
+
+    @Get('email/:email')
+    findByEmail(@Param('email') email: string) {
+        return this.userservice.findByEmail(email);
+    }
 }
