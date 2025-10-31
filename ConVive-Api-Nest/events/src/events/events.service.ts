@@ -28,7 +28,7 @@ export class EventsService {
     //validar se o userId existe na API de usuários
     let user: any = await this.getUserCache(dto);
 
-    if (!user.data.isAdmin) {
+    if (!user.isAdmin) {
       throw new ForbiddenException('Usuário não pode criar um evento');
     }
 
@@ -71,7 +71,7 @@ export class EventsService {
     return saved;
   }
 
-  private async getUserCache(dto) {
+  private async getUserCache(dto: CreateEventDto) {
     const cacheKey = `user:${dto.userId}`;
     const cacheUser = await this.redis.getClient().get(cacheKey);
 
