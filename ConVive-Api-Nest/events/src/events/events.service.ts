@@ -11,6 +11,8 @@ import { CreateEventDto } from './dto/createEventDto';
 import { HttpService } from 'src/http/http.service';
 import { RedisService } from 'src/redis/redis.service';
 import { UpdateEventDto } from './dto/updateEventDto';
+import { ValidationEvent } from 'src/utils/validationEvent';
+import e from 'express';
 
 @Injectable()
 export class EventsService {
@@ -18,6 +20,7 @@ export class EventsService {
     @InjectRepository(Event) private repo: Repository<Event>,
     private http: HttpService,
     private redis: RedisService,
+    private validateEvent: ValidationEvent,
   ) {}
 
   findAll() {
@@ -28,25 +31,14 @@ export class EventsService {
     //validar se o userId existe na API de usuários
     let user: any = await this.getUserCache(dto);
 
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Usuário não pode criar um evento');
-    }
-
-    const eventDate = new Date(dto.date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Ignora horas
-
-    if (eventDate < today) {
-      throw new ForbiddenException('A data do evento não pode ser no passado');
-    }
+    this.validateEvent.validationIsAdm(user);
+    const eventDate = this.validateEvent.validationDateEvent(dto.date);
 
     const existingEvent = await this.repo.findOne({
       where: { date: eventDate },
     });
 
-    if (existingEvent) {
-      throw new BadRequestException('Já existe um evento nessa data.');
-    }
+    this.validateEvent.validationExistEventDate(existingEvent);
 
     const event = this.repo.create({
       title: dto.title,
@@ -75,19 +67,19 @@ export class EventsService {
     const cacheKey = `user:${dto.userId}`;
     const cacheUser = await this.redis.getClient().get(cacheKey);
 
-    if(cacheUser) {
+    if (cacheUser) {
       console.log('User data retrieved from cache');
-      return JSON.parse(cacheUser)
+      return JSON.parse(cacheUser);
     }
 
-    const {data} = await this.http.instance
+    const { data } = await this.http.instance
       .get(`/users/${dto.userId}`)
       .catch(() => {
         throw new NotFoundException('Usuário não encontrado');
       });
 
-    console.log("User data retrieved from users service, caching it now");
-    await this.redis.getClient().set(cacheKey, JSON.stringify(data), "EX", 60)
+    console.log('User data retrieved from users service, caching it now');
+    await this.redis.getClient().set(cacheKey, JSON.stringify(data), 'EX', 60);
 
     return data;
   }
@@ -95,10 +87,7 @@ export class EventsService {
   async findById(id: number) {
     console.log('Procurando Evento pelo id:', id);
     const event = await this.repo.findOne({ where: { id } });
-
-    if (!event) {
-      throw new NotFoundException('Evento não encontrado');
-    }
+    this.validateEvent.findEvent(event);
     return event;
   }
 
@@ -109,44 +98,30 @@ export class EventsService {
       throw new NotFoundException('Evento não encontrado');
     }
 
-    if (dto.date) {
-      const eventDate = new Date(dto.date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Ignora horas
+    const eventDate = this.validateEvent.validationDateEvent(dto.date);
 
-      if (eventDate < today) {
-        throw new ForbiddenException(
-          'A data do evento não pode ser no passado',
-        );
-      }
+    const existingEvent = await this.repo.findOne({
+      where: { date: eventDate, id: Not(id) },
+    });
 
-      const existingEvent = await this.repo.findOne({
-        where: { date: eventDate, id: Not(id) },
-      });
+    this.validateEvent.validationExistEventDate(existingEvent);
 
-      if (existingEvent) {
-        throw new BadRequestException('Já existe um evento nessa data.');
-      }
-
-      event.date = eventDate;
-    }
-
+    event.date = eventDate;
     event.title = dto.title ?? event.title;
     event.location = dto.location ?? event.location;
     event.imageUrl = dto.imageUrl ?? event.imageUrl;
     event.descriptionCard = dto.descriptionCard ?? event.descriptionCard;
     event.descriptionModal = dto.descriptionModal ?? event.descriptionModal;
 
-    return await this.repo.save(event), { message: 'Evento atualizado com sucesso' };
+    return (
+      await this.repo.save(event),
+      { message: 'Evento atualizado com sucesso' }
+    );
   }
 
   async delete(id: number) {
     const event = await this.repo.findOne({ where: { id } });
-
-    if (!event) {
-      throw new NotFoundException('Evento não encontrado');
-    }
-
-    return this.repo.delete(id), { message: 'Evento deletado com sucesso' }
+    this.validateEvent.findEvent(event);
+    return (this.repo.delete(id), { message: 'Evento deletado com sucesso' });
   }
 }
