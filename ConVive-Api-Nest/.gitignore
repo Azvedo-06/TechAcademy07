@@ -1,8 +1,14 @@
 users/node_modules
 users/dist
 users/build
+users/.env
 
-orders/node_modules
-orders/dist
-orders/build
-orders/.env
+events/node_modules
+events/dist
+events/build
+events/.env
+
+auth/node_modules
+auth/dist
+auth/build
+auth/.env
