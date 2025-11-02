@@ -8,7 +8,7 @@ events/dist
 events/build
 events/.env
 
-# auth/node_modules
-# auth/dist
-# auth/build
-# auth/.env
+auth/node_modules
+auth/dist
+auth/build
+auth/.env
