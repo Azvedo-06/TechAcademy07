@@ -12,8 +12,6 @@ import { HttpService } from 'src/http/http.service';
 import { RedisService } from 'src/redis/redis.service';
 import { UpdateEventDto } from './dto/updateEventDto';
 import { ValidationEvent } from 'src/utils/validationEvent';
-import e from 'express';
-
 @Injectable()
 export class EventsService {
   constructor(
@@ -43,7 +41,7 @@ export class EventsService {
     const event = this.repo.create({
       title: dto.title,
       date: new Date(dto.date),
-      location: dto.location,
+      spaceId: dto.spaceId,
       imageUrl: dto.imageUrl,
       descriptionCard: dto.descriptionCard,
       descriptionModal: dto.descriptionModal,
@@ -108,7 +106,7 @@ export class EventsService {
 
     event.date = eventDate;
     event.title = dto.title ?? event.title;
-    event.location = dto.location ?? event.location;
+    event.spaceId = dto.spaceId ?? event.spaceId;
     event.imageUrl = dto.imageUrl ?? event.imageUrl;
     event.descriptionCard = dto.descriptionCard ?? event.descriptionCard;
     event.descriptionModal = dto.descriptionModal ?? event.descriptionModal;

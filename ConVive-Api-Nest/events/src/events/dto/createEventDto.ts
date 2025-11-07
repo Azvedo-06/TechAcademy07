@@ -8,7 +8,7 @@ export class CreateEventDto {
   date: string; // tipo string para validação via DTO, depois converte para Date no service
 
   @IsString()
-  location: string;
+  spaceId: number;
 
   @IsOptional()
   @IsString()

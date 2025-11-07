@@ -15,8 +15,8 @@ export class Event {
   @Column()
   date: Date;
 
-  @Column()
-  location: string;
+  @Column({nullable: true})
+  spaceId: number;
 
   @Column({ nullable: true })
   imageUrl?: string;

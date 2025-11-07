@@ -72,6 +72,35 @@ services:
       - service-users
     networks: [backend]
 
+  service-spaces:
+    build: ./spaces
+    ports:
+      - "3003:3000"
+    restart: always
+    environment:
+      DB_HOST: spaces-db
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: spacesdb
+      DB_PORT: 5432
+    depends_on:
+      - spaces-db
+    networks:
+      - backend
+
+  spaces-db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spacesdb
+    ports:
+      - "5435:5432"
+    volumes:
+      - spaces_data:/var/lib/postgresql/data
+    networks:
+      - backend
   redis:
     image: redis:7
     restart: always
@@ -93,6 +122,7 @@ services:
 volumes:
   users_data:
   events_data:
+  spaces_data:
 
 networks:
   backend:
