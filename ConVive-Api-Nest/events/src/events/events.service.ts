@@ -1,6 +1,4 @@
 import {
-  BadRequestException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -26,8 +24,11 @@ export class EventsService {
   }
 
   async create(dto: CreateEventDto) {
-    //validar se o userId existe na API de usuários
+    // validar se o userId existe na API de usuários
     let user: any = await this.getUserCache(dto);
+    // API de espaços
+    const space = await this.getSpaceCache(dto.spaceId);
+    this.validateEvent.FindSpace(space);
 
     this.validateEvent.validationIsAdm(user);
     const eventDate = this.validateEvent.validationDateEvent(dto.date);
@@ -54,32 +55,12 @@ export class EventsService {
       JSON.stringify({
         eventId: saved.id,
         userId: dto.userId,
+        spaceId: dto.spaceId
       }),
     );
     console.log('Published event_created event to Redis');
 
     return saved;
-  }
-
-  private async getUserCache(dto: CreateEventDto) {
-    const cacheKey = `user:${dto.userId}`;
-    const cacheUser = await this.redis.getClient().get(cacheKey);
-
-    if (cacheUser) {
-      console.log('User data retrieved from cache');
-      return JSON.parse(cacheUser);
-    }
-
-    const { data } = await this.http.instance
-      .get(`/users/${dto.userId}`)
-      .catch(() => {
-        throw new NotFoundException('Usuário não encontrado');
-      });
-
-    console.log('User data retrieved from users service, caching it now');
-    await this.redis.getClient().set(cacheKey, JSON.stringify(data), 'EX', 60);
-
-    return data;
   }
 
   async findById(id: number) {
@@ -90,8 +71,11 @@ export class EventsService {
   }
 
   async update(id: number, dto: UpdateEventDto) {
-    const event = await this.repo.findOne({ where: { id } });
+    // API de espaços
+    const space = await this.getSpaceCache(dto.spaceId);
 
+    const event = await this.repo.findOne({ where: { id } });
+    this.validateEvent.FindSpace(space);
     if (!event) {
       throw new NotFoundException('Evento não encontrado');
     }
@@ -121,5 +105,48 @@ export class EventsService {
     const event = await this.repo.findOne({ where: { id } });
     this.validateEvent.findEvent(event);
     return (this.repo.delete(id), { message: 'Evento deletado com sucesso' });
+  }
+
+
+  private async getUserCache(dto: CreateEventDto) {
+    const cacheKey = `user:${dto.userId}`;
+    const cacheUser = await this.redis.getClient().get(cacheKey);
+
+    if (cacheUser) {
+      console.log('User data retrieved from cache');
+      return JSON.parse(cacheUser);
+    }
+
+    const { data } = await this.http.users
+      .get(`/users/${dto.userId}`)
+      .catch(() => {
+        throw new NotFoundException('Usuário não encontrado');
+      });
+
+    console.log('User data retrieved from users service, caching it now');
+    await this.redis.getClient().set(cacheKey, JSON.stringify(data), 'EX', 60);
+
+    return data;
+  }
+
+  private async getSpaceCache(spaceId: number) {
+    const cacheKey = `space:${spaceId}`;
+    const cacheSpace = await this.redis.getClient().get(cacheKey);
+
+    if(cacheSpace) {
+      console.log('Space data retrieved from cache');
+      return JSON.parse(cacheSpace);
+    }
+
+    const { data } = await this.http.spaces
+      .get(`/spaces/${spaceId}`)
+      .catch(() => {
+        throw new NotFoundException('Espaço não encontrado');
+      });
+
+    console.log('Space data retrieved from spaces service, caching it now');
+    await this.redis.getClient().set(cacheKey, JSON.stringify(data), 'EX', 60);
+
+    return data;
   }
 }

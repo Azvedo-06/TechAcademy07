@@ -1,12 +1,14 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { RedisService } from 'src/redis/redis.service';
 import { EventsService } from './events.service';
+import { HttpService } from 'src/http/http.service';
 
 @Injectable()
 export class EventProcessorService implements OnModuleInit {
   constructor(
     private readonly redisService: RedisService,
     private readonly eventsService: EventsService,
+    private readonly spaceService: HttpService,
   ) {}
 
   async onModuleInit() {
@@ -25,6 +27,7 @@ export class EventProcessorService implements OnModuleInit {
 
       try {
         const eventData = JSON.parse(message);
+        const spaceId = eventData.spaces?.spaceId ?? eventData.spaceId ?? eventData.id;
         const eventId = eventData.eventId || eventData.id;
 
         const existing = await this.eventsService.findById(eventId);
@@ -32,8 +35,13 @@ export class EventProcessorService implements OnModuleInit {
           console.warn(`Evento ${eventId} não encontrado.`);
           return;
         }
-
+        const { data: space } = await this.spaceService.spaces.get(`/spaces/${spaceId}`);
+        if (!space) {
+          console.warn(`Espaço ${spaceId} não encontrado no serviço externo.`);
+          return;
+        }
         console.log(`Evento ${eventId} encontrado: "${existing.title}".`);
+        console.log(`Espaço encontrado: "${space.title}" (ID: ${spaceId})`);
         console.log('Nenhuma ação adicional necessária.');
 
       } catch (err) {

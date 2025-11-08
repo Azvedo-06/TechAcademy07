@@ -27,4 +27,9 @@ export class ValidationEvent {
       throw new NotFoundException('Evento não encontrado');
     }
   }
+  FindSpace(space: any) {
+    if (!space) {
+      throw new NotFoundException('Espaço não encontrado');
+    }
+  }
 }

@@ -38,11 +38,13 @@ services:
       DB_NAME: eventsdb
       DB_PORT: 5432
       USERS_API: http://service-users:3000
+      SPACES_API: http://service-spaces:3000
       REDIS_HOST: redis
       REDIS_PORT: 6379
     depends_on:
       - events-db
       - service-users
+      - service-spaces
     networks: [backend]
 
   events-db:
