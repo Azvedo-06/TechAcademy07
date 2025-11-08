@@ -73,6 +73,7 @@ export class EventsService {
   async update(id: number, dto: UpdateEventDto) {
     // API de espaços
     const space = await this.getSpaceCache(dto.spaceId);
+    this.validateEvent.FindSpace(space);
 
     const event = await this.repo.findOne({ where: { id } });
     this.validateEvent.FindSpace(space);
@@ -120,7 +121,7 @@ export class EventsService {
     const { data } = await this.http.users
       .get(`/users/${dto.userId}`)
       .catch(() => {
-        throw new NotFoundException('Usuário não encontrado');
+        throw new NotFoundException('Cache: Usuário não encontrado');
       });
 
     console.log('User data retrieved from users service, caching it now');
@@ -141,7 +142,7 @@ export class EventsService {
     const { data } = await this.http.spaces
       .get(`/spaces/${spaceId}`)
       .catch(() => {
-        throw new NotFoundException('Espaço não encontrado');
+        throw new NotFoundException('Cache: Espaço não encontrado');
       });
 
     console.log('Space data retrieved from spaces service, caching it now');
