@@ -7,7 +7,7 @@ export class ValidationEvent {
       throw new ForbiddenException('Usuário não pode criar um evento');
     }
   }
-  validationDateEvent(date: any): Date {
+  validationDateEvent(date: any) {
     const eventDate = new Date(date);
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Ignora horas

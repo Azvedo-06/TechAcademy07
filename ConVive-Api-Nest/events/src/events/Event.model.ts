@@ -12,8 +12,8 @@ export class Event {
   @Column()
   title: string;
 
-  @Column()
-  date: Date;
+  @Column({type: 'date', nullable: true}) // Permitir nulo temporariamente
+  date: string;
 
   @Column({nullable: true})
   spaceId: number;

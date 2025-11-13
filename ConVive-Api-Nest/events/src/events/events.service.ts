@@ -41,7 +41,7 @@ export class EventsService {
 
     const event = this.repo.create({
       title: dto.title,
-      date: new Date(dto.date),
+      date: dto.date,
       spaceId: dto.spaceId,
       imageUrl: dto.imageUrl,
       descriptionCard: dto.descriptionCard,
@@ -89,7 +89,7 @@ export class EventsService {
 
     this.validateEvent.validationExistEventDate(existingEvent);
 
-    event.date = eventDate;
+    event.date = dto.date ?? event.date;;
     event.title = dto.title ?? event.title;
     event.spaceId = dto.spaceId ?? event.spaceId;
     event.imageUrl = dto.imageUrl ?? event.imageUrl;
