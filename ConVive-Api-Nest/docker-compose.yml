@@ -9,6 +9,7 @@ services:
       DB_USER: postgres
       DB_PASS: postgres
       DB_NAME: usersdb
+      JWT_SECRET: convive_secret
       DB_PORT: 5432
     depends_on:
       - users-db
@@ -39,6 +40,7 @@ services:
       DB_PORT: 5432
       USERS_API: http://service-users:3000
       SPACES_API: http://service-spaces:3000
+      JWT_SECRET: convive_secret
       REDIS_HOST: redis
       REDIS_PORT: 6379
     depends_on:
@@ -84,6 +86,7 @@ services:
       DB_USER: postgres
       DB_PASS: postgres
       DB_NAME: spacesdb
+      JWT_SECRET: convive_secret
       DB_PORT: 5432
     depends_on:
       - spaces-db

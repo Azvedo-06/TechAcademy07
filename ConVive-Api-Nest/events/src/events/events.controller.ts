@@ -2,7 +2,10 @@ import { Controller, Get, Post, Param, Body, Delete, Put } from '@nestjs/common'
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/createEventDto';
 import { UpdateEventDto } from './dto/updateEventDto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('events')
 export class EventsController {
     constructor(private eventService: EventsService) {}

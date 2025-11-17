@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { SpacesService } from './spaces.service';
 import { CreateSpacesDto } from './dto/createSpacesDto';
 import { updateSpaceDto } from './dto/updateSpaceDto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('spaces')
 export class SpacesController {
     constructor(
