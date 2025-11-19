@@ -3,8 +3,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/createUserDto';
 import { UpdateUserDto } from './dto/updateUserDto';
 import { AuthGuard } from '@nestjs/passport';
+import { Public } from './guard/public.decorator';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('users')
 export class UsersController {
     constructor(private userservice: UsersService) {}
@@ -13,7 +13,8 @@ export class UsersController {
     findAllUsers() {
         return this.userservice.findAll();
     }
-
+    
+    @Public()
     @Post()
     createUser(@Body() dto: CreateUserDto) {
         return this.userservice.create(dto);
@@ -34,6 +35,7 @@ export class UsersController {
         return this.userservice.update(id, dto);
     }
 
+    @Public()
     @Get('email/:email')
     findByEmail(@Param('email') email: string) {
         return this.userservice.findByEmail(email);

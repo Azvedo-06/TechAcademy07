@@ -12,7 +12,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('🟢 TOKEN VALIDADO NO EVENTS:', payload);
     return { userId: payload.sub, email: payload.email, isAdmin: payload.isAdmin};
   }
 }
