@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nes
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/createUserDto';
 import { UpdateUserDto } from './dto/updateUserDto';
-import { AuthGuard } from '@nestjs/passport';
 import { Public } from './guard/public.decorator';
 
 @Controller('users')
@@ -19,7 +18,7 @@ export class UsersController {
     createUser(@Body() dto: CreateUserDto) {
         return this.userservice.create(dto);
     }
-
+    
     @Get('/:id')
     findOneUser(@Param('id') id: number) {
         return this.userservice.findById(id);

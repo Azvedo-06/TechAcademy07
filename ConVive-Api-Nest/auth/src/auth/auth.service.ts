@@ -26,6 +26,6 @@ export class AuthService {
       isAdmin: user.isAdmin,
     });
 
-    return { "access_token": token};
+    return { "token": token};
   }
 }
