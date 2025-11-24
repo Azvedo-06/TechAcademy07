@@ -13,6 +13,8 @@ import { ValidationEvent } from 'src/utils/validationEvent';
 import { JwtStrategy } from './guard/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { UserSubscriber } from 'src/subscribers/user.subscriber';
+import { SpaceSubscriber } from 'src/subscribers/space.subscriber';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Event]), HttpModule, RedisModule, PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -22,6 +24,6 @@ import { PassportModule } from '@nestjs/passport';
     }),
   ],
   controllers: [EventsController],
-  providers: [EventsService, HttpService, RedisService, EventProcessorService, EventApproverService, ValidationEvent, JwtStrategy],
+  providers: [EventsService, HttpService, RedisService, EventProcessorService, EventApproverService, ValidationEvent, JwtStrategy, UserSubscriber, SpaceSubscriber],
 })
 export class EventsModule {}

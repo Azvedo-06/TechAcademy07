@@ -6,48 +6,44 @@ import { HttpService } from 'src/http/http.service';
 @Injectable()
 export class EventApproverService implements OnModuleInit {
   constructor(
-    private readonly redisService: RedisService,
+    private readonly redis: RedisService,
     private readonly eventsService: EventsService,
-    private readonly spaceService: HttpService,
+    private readonly httpService: HttpService,
   ) {}
 
   async onModuleInit() {
-    const sub = this.redisService.getSubscriber2();
+    const subscriber = this.redis.getSubscriber();
 
-    await sub.subscribe('event_processed', (err, count) => {
-      if (err) {
-        console.error('Falha ao se inscrever no canal Redis:', err);
-      } else {
-        console.log(`Inscrito com sucesso! (${count} canais ativos)`);
-      }
-    });
+    await subscriber.subscribe('event_processed');
+    console.log('[EventApprover] Inscrito no canal "event_processed"');
 
-    sub.on('message', async (channel, message) => {
-      console.log(`Mensagem recebida de ${channel}: ${message}`);
+    subscriber.on('message', async (channel, message) => {
+      if (channel !== 'event_processed') return;
 
       try {
         const data = JSON.parse(message);
-        const spaceId = data.spaces?.spaceId ?? data.spaceId ?? data.id
-        const eventId = data.eventId;
+        const { eventId, spaceId, userId } = data;
 
-        const existing = await this.eventsService.findById(eventId);
-
-        if (!existing) {
-          console.warn(`Evento ${eventId} não encontrado.`);
+        if (!eventId || !spaceId || !userId) {
+          console.warn('[EventApprover] Mensagem inválida:', data);
           return;
         }
 
-        const { data: space } = await this.spaceService.spaces.get(`/spaces/${spaceId}`);
-        if (!space) {
-          console.warn(`Espaço ${spaceId} não encontrado no serviço externo.`);
+        const event = await this.eventsService.findById(eventId);
+        if (!event) {
+          console.warn(`[EventApprover] Evento ${eventId} não encontrado.`);
           return;
         }
 
-        console.log(`Evento ${eventId} encontrado:`, existing.title);
-        console.log(`Espaço ${spaceId} encontrado:`, space.title);
-        console.log('Nenhuma ação necessária (sem regra de negócio definida).');
+        const space = await this.eventsService.getSpaceCache(spaceId);
+
+        const user = await this.eventsService.getUserCache(userId);
+
+        console.log(
+          `[EventApprover] Evento "${event.title}" | Espaço "${space.title}" | Usuário "${user.name}"`,
+        );
       } catch (err) {
-        console.error(' Erro ao processar mensagem:', err);
+        console.error('[EventApprover] Erro ao processar mensagem:', err);
       }
     });
   }

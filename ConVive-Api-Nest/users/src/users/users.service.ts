@@ -10,12 +10,15 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUserDto';
 import { UpdateUserDto } from './dto/updateUserDto';
 import { ValidationsUsers } from 'src/utils/validationsUsers';
+import { RedisService } from 'src/redis/redis.service';
+
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private repo: Repository<User>,
-    private validateUsers: ValidationsUsers
+    private validateUsers: ValidationsUsers,
+    private redis: RedisService,
   ) {}
 
   findAll() {
@@ -39,7 +42,15 @@ export class UsersService {
       password: hashedPassword,
       isAdmin: dto.isAdmin ?? false,
     });
-    return this.repo.save(user);
+
+    const savedUser = await this.repo.save(user);
+
+    await this.redis.getPublisher().publish(
+    'user_created',
+    JSON.stringify(savedUser),
+    );
+
+    return savedUser;
   }
 
   async findById(id: number) {

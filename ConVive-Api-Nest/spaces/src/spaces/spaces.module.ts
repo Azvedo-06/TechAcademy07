@@ -7,9 +7,10 @@ import { ValidationSpaces } from 'src/utils/validationsSpaca';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from 'src/guard/jwt.strategy';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Space]), PassportModule.register({ defaultStrategy: 'jwt' }),
+    imports: [TypeOrmModule.forFeature([Space]), RedisModule, PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.register({
             secret: process.env.JWT_SECRET,
             signOptions: { expiresIn: '1d' },

@@ -32,7 +32,7 @@ export class SpacesController {
     }
 
     @Put('/:id')
-    updateSpace(@Param('id') id: number, dto: updateSpaceDto) {
+    updateSpace(@Param('id') id: number, @Body() dto: updateSpaceDto) {
         return this.spaceService.update(id, dto)
     }
 

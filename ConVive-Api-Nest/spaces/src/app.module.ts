@@ -5,6 +5,8 @@ import { SpacesModule } from './spaces/spaces.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Space } from './spaces/entities/Space.model';
+import { RedisModule } from './redis/redis.module';
+import { RedisService } from './redis/redis.service';
 
 @Module({
   imports: [
@@ -23,8 +25,9 @@ import { Space } from './spaces/entities/Space.model';
       inject: [ConfigService],
     }),
     SpacesModule,
+    RedisModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RedisService],
 })
 export class AppModule {}
