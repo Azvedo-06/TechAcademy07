@@ -4,7 +4,7 @@ import { Event } from 'src/events/Event.model';
 export class ValidationEvent {
   validationIsAdm(user: any) {
     if (user.isAdmin === false) {
-      throw new ForbiddenException('Usuário não pode criar um evento');
+      throw new ForbiddenException('Usuário não tem permissão para criar um evento');
     }
   }
   validationDateEvent(date: any) {
@@ -23,12 +23,12 @@ export class ValidationEvent {
     }
   }
   findEvent(event: Event | any) {
-    if (!event) {
+    if (!event || !event.id) {
       throw new NotFoundException('Evento não encontrado');
     }
   }
   FindSpace(space: any) {
-    if (!space) {
+    if (!space || !space.id) {
       throw new NotFoundException('Espaço não encontrado');
     }
   }

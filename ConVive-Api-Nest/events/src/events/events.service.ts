@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './Event.model';
 import { Repository, Not } from 'typeorm';
@@ -96,7 +100,9 @@ export class EventsService {
         spaceId: updated.spaceId,
       }),
     );
-    console.log(`[Cache] Evento ${updated.title} atualizado e publicado no Redis`);
+    console.log(
+      `[Cache] Evento ${updated.title} atualizado e publicado no Redis`,
+    );
     return updated;
   }
 
@@ -107,39 +113,52 @@ export class EventsService {
   }
 
   async getUserCache(userId: number) {
-    const cacheKey = `user:${userId}`;
+    userId = Number(userId);
 
+    if (!userId || isNaN(userId) || userId < 1) {
+      throw new NotFoundException(`ID de usuário inválido: ${userId}`);
+    }
+
+    const cacheKey = `user:${userId}`;
     const cacheUser = await this.redis.getClient().get(cacheKey);
     if (cacheUser) {
       console.log('User data retrieved from cache');
       return JSON.parse(cacheUser);
     }
 
-    let userData: any;
-
     try {
       const response = await this.http.users.get(`/users/${userId}`);
-      userData = response.data;
-    } catch {
-      userData = null;
-    }
-
-    if (userData) {
-      console.log('User data retrieved from users service, caching it now');
+      const userData = response.data;
       await this.redis
         .getClient()
-        .set(`user:${userId}`, JSON.stringify(userData), 'EX', 3600);
-      return userData;
-    }
+        .set(cacheKey, JSON.stringify(userData), 'EX', 3600);
 
-    // se não tiver encontrado na API
-    throw new NotFoundException('Usuário não encontrado');
+      return userData;
+    } catch (err) {
+      const status = err.response?.status;
+      console.log('Erro ao buscar usuário na API:', status);
+
+      if (status === 404) {
+        throw new NotFoundException('Usuário não encontrado');
+      }
+
+      if (status === 401) {
+        throw new UnauthorizedException('Não autorizado ao buscar usuário');
+      }
+
+      throw new Error('Erro ao buscar usuário na API');
+    }
   }
 
-  // -------------------------
-  // CACHE INTELIGENTE DE ESPAÇO
   async getSpaceCache(spaceId: number) {
+    spaceId = Number(spaceId);
+
+    if (!spaceId || isNaN(spaceId) || spaceId < 1) {
+      throw new NotFoundException(`ID de espaço inválido: ${spaceId}`);
+    }
+
     const cacheKey = `space:${spaceId}`;
+    console.log('id espaço: ', spaceId);
 
     const cacheSpace = await this.redis.getClient().get(cacheKey);
     if (cacheSpace) {
@@ -147,22 +166,28 @@ export class EventsService {
       return JSON.parse(cacheSpace);
     }
 
-    let spaceData: any;
-
     try {
       const response = await this.http.spaces.get(`/spaces/${spaceId}`);
-      spaceData = response.data;
-    } catch {
-      spaceData = null;
-    }
+      const spaceData = response.data;
 
-    if (spaceData) {
       await this.redis
         .getClient()
-        .set(`space:${spaceId}`, JSON.stringify(spaceData), 'EX', 3600);
-      return spaceData;
-    }
+        .set(cacheKey, JSON.stringify(spaceData), 'EX', 3600);
 
-    throw new NotFoundException('Espaço não encontrado');
+      return spaceData;
+    } catch (err) {
+      const status = err.response?.status;
+      console.log('Erro ao buscar espaço na API:', err.response?.status);
+
+      if (status === 401) {
+        throw new UnauthorizedException('Não autorizado ao buscar espaço');
+      }
+
+      if (status === 404) {
+        throw new NotFoundException('Espaço não encontrado');
+      }
+
+      throw new Error('Erro ao buscar espaço na API');
+    }
   }
 }

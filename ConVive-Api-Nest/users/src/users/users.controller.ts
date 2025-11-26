@@ -7,7 +7,7 @@ import { Public } from './guard/public.decorator';
 @Controller('users')
 export class UsersController {
     constructor(private userservice: UsersService) {}
-
+    @Public()
     @Get()
     findAllUsers() {
         return this.userservice.findAll();
@@ -19,6 +19,7 @@ export class UsersController {
         return this.userservice.create(dto);
     }
     
+    @Public()
     @Get('/:id')
     findOneUser(@Param('id') id: number) {
         return this.userservice.findById(id);
