@@ -4,8 +4,8 @@ export class CreateSpacesDto {
   @ApiProperty()
   @IsString()
   title: string;
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  imageUrl: string;
+  imageUrl?: string;
 }

@@ -28,13 +28,14 @@ export class SpacesService {
   async delete(id: number) {
     const space = await this.repo.findOne({ where: { id } });
     this.validateSpace.findSpace(space);
-    return (this.repo.delete(id), { message: 'Espaço deletado com sucesso' });
+    await this.repo.delete(id);
+    return { message: 'Espaço deletado com sucesso' };
   }
 
   async create(dto: CreateSpacesDto) {
     const space = this.repo.create({
       title: dto.title,
-      imageUrl: dto.imageUrl,
+      imageUrl: dto.imageUrl
     });
     const savedSpace = await this.repo.save(space);
 

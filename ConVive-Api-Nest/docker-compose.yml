@@ -98,6 +98,8 @@ services:
       - spaces-db
     networks:
       - backend
+    volumes:
+    - ./spaces/uploads:/usr/src/app/uploads
 
   spaces-db:
     image: postgres:15
